@@ -1,0 +1,812 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="ProcessResult" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:eus="clr-namespace:Element5_Core.Utils.Store;assembly=Element5.Core" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:njl="clr-namespace:Newtonsoft.Json.Linq;assembly=Newtonsoft.Json" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property sap2010:Annotation.AnnotationText="RecordStatus" Name="Status" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="SummaryFieldName-SPA" Name="SummaryFieldNames" Type="InArgument(scg:List(x:String))" />
+    <x:Property sap2010:Annotation.AnnotationText="Information gathered for current work item&#xA;" Name="YearlyReportDetails" Type="InArgument(njl:JObject)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>1118,5126</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ProcessResult_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="33">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>Newtonsoft.Json.Linq</x:String>
+      <x:String>Newtonsoft.Json</x:String>
+      <x:String>System.Dynamic</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Collections.Specialized</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.InteropServices</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
+      <x:String>Element5_Core.Utils.Store</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>Element5.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>Microsoft.Bcl.AsyncInterfaces</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>NPOI</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="Process the RecordList in SPA Run History and Overview Graph Presentation." DisplayName="Process_Results" sap:VirtualizedContainerService.HintSize="820,5061" sap2010:WorkflowViewState.IdRef="Sequence_11">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Default="ResultRecords" Modifiers="ReadOnly" Name="RESULT_RECORDS" />
+      <Variable x:TypeArguments="ui:GenericValue" Name="SummaryInfoJSON" />
+      <Variable x:TypeArguments="ui:GenericValue" Name="ResultRecordsJSON" />
+      <Variable x:TypeArguments="x:String" Default="SummaryInfo" Modifiers="ReadOnly" Name="SUMMARY_INFO" />
+      <Variable x:TypeArguments="njl:JObject" Name="Record" />
+      <Variable x:TypeArguments="x:Int32" Name="SuccessRecords" />
+      <Variable x:TypeArguments="x:String" Default="SummaryResult" Name="SUMMARY_RESULT" />
+      <Variable x:TypeArguments="ui:GenericValue" Name="SummaryResultJson" />
+      <Variable x:TypeArguments="x:Int32" Name="Count" />
+      <Variable x:TypeArguments="x:Int32" Name="failedCount" />
+      <Variable x:TypeArguments="x:Int32" Name="succeededCount" />
+      <Variable x:TypeArguments="x:Int32" Name="skippedCount" />
+      <Variable x:TypeArguments="x:Int32" Name="SkippedRecords" />
+      <Variable x:TypeArguments="x:Int32" Name="FailedRecords" />
+      <Variable x:TypeArguments="x:String" Name="Message" />
+      <Variable x:TypeArguments="njl:JObject" Name="Summary" />
+      <Variable x:TypeArguments="x:Int32" Name="TotalRecords" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Sequence DisplayName="Get Existing Results" sap:VirtualizedContainerService.HintSize="778,284" sap2010:WorkflowViewState.IdRef="Sequence_7">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <TryCatch DisplayName="Fetch ResultRecordsJSON" sap:VirtualizedContainerService.HintSize="338,61" sap2010:WorkflowViewState.IdRef="TryCatch_3">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <TryCatch.Try>
+          <eus:Get_Generic_Value DisplayName="Get Result JSON" ErrorOnKeyMiss="True" sap:VirtualizedContainerService.HintSize="284,132" sap2010:WorkflowViewState.IdRef="Get_Generic_Value_3" Key="[RESULT_RECORDS]" Value="[ResultRecordsJSON]" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+        </TryCatch.Try>
+        <TryCatch.Catches>
+          <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="400,160" sap2010:WorkflowViewState.IdRef="Catch`1_3">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ActivityAction x:TypeArguments="s:Exception">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+              </ActivityAction.Argument>
+              <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[exception.Message]" />
+            </ActivityAction>
+          </Catch>
+        </TryCatch.Catches>
+      </TryCatch>
+      <TryCatch DisplayName="Fetch SummaryInfoJSON" sap:VirtualizedContainerService.HintSize="338,61" sap2010:WorkflowViewState.IdRef="TryCatch_4">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <TryCatch.Try>
+          <eus:Get_Generic_Value DisplayName="Get Summary Info" ErrorOnKeyMiss="True" sap:VirtualizedContainerService.HintSize="284,132" sap2010:WorkflowViewState.IdRef="Get_Generic_Value_4" Key="[SUMMARY_INFO]" Value="[SummaryInfoJSON]" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+        </TryCatch.Try>
+        <TryCatch.Catches>
+          <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="400,160" sap2010:WorkflowViewState.IdRef="Catch`1_4">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ActivityAction x:TypeArguments="s:Exception">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+              </ActivityAction.Argument>
+              <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Error" Message="[exception.Message]" />
+            </ActivityAction>
+          </Catch>
+        </TryCatch.Catches>
+      </TryCatch>
+    </Sequence>
+    <Sequence DisplayName="Construct ResultsRecord and Summary" sap:VirtualizedContainerService.HintSize="778,4647" sap2010:WorkflowViewState.IdRef="Sequence_10">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <Sequence DisplayName="Construct Result Records" sap:VirtualizedContainerService.HintSize="716,1312" sap2010:WorkflowViewState.IdRef="Sequence_8">
+        <Sequence.Variables>
+          <Variable x:TypeArguments="njl:JArray" Name="ResultsArray" />
+          <Variable x:TypeArguments="scg:List(njl:JObject)" Name="JSONList" />
+        </Sequence.Variables>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <ui:MultipleAssign DisplayName="Deserialize JSON" sap:VirtualizedContainerService.HintSize="431,61" sap2010:WorkflowViewState.IdRef="MultipleAssign_14">
+          <ui:MultipleAssign.AssignOperations>
+            <scg:List x:TypeArguments="ui:AssignOperation" Capacity="16">
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_76">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JArray">[ResultsArray]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JArray">[If(String.IsNullOrEmpty(ResultRecordsJSON), New JArray, JArray.Parse(ResultRecordsJSON))]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_77">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="scg:List(njl:JObject)">[JSONList]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="scg:List(njl:JObject)">[ResultsArray.ToObject(Of List(Of JObject))]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_78">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[skippedCount]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_79">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[succeededCount]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_81">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[failedCount]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="AssignOperation_86">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[TotalRecords]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">1</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+            </scg:List>
+          </ui:MultipleAssign.AssignOperations>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:MultipleAssign>
+        <ui:MultipleAssign DisplayName="Populate Record" sap:VirtualizedContainerService.HintSize="431,513" sap2010:WorkflowViewState.IdRef="MultipleAssign_13">
+          <ui:MultipleAssign.AssignOperations>
+            <scg:List x:TypeArguments="ui:AssignOperation" Capacity="16">
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_67">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JObject">[Record]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JObject">[New JObject]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_68">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Record("WIID")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[YearlyReportDetails("WIID").ToString]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_69">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Record("Description")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[YearlyReportDetails("Description").ToString]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_74">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Record("Type")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[YearlyReportDetails("Type").ToString]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_75">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Record("Status")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[Status]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_106">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Record("Date")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[YearlyReportDetails("Date").Tostring]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_107">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Record("Yearly Reprt Path")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[YearlyReportDetails("YearlyReportPath").ToString]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_111">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Record("Tax ID")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[YearlyReportDetails("TaxID").Tostring]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_124">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Record("Confirmation ID")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[YearlyReportDetails("Confirmation ID").ToString]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_125">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Record("Upload Status")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[YearlyReportDetails("UploadStatus").ToString]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_126">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Record("Reason")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[YearlyReportDetails("Reason").ToString]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_110">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[skippedCount]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">[If( Status.ToLower="skipped", skippedCount+1, skippedCount)]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_108">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[failedCount]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">[if( Status.ToLower="failed", failedCount+1, failedCount)]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_109">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[succeededCount]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">[if( Status.ToLower="success", succeededCount+1, succeededCount)]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+            </scg:List>
+          </ui:MultipleAssign.AssignOperations>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:MultipleAssign>
+        <AddToCollection x:TypeArguments="njl:JObject" Collection="[JSONList]" DisplayName="Add Record to the List" sap:VirtualizedContainerService.HintSize="431,32" sap2010:WorkflowViewState.IdRef="AddToCollection`1_2" Item="[Record]" />
+        <ui:MultipleAssign DisplayName="Serialize JSON" sap:VirtualizedContainerService.HintSize="431,141" sap2010:WorkflowViewState.IdRef="MultipleAssign_9">
+          <ui:MultipleAssign.AssignOperations>
+            <scg:List x:TypeArguments="ui:AssignOperation" Capacity="4">
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_49">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JArray">[ResultsArray]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JArray">[JArray.FromObject(JSONList)]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_50">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="ui:GenericValue">[ResultRecordsJSON]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="ui:GenericValue">[ResultsArray.ToString(Newtonsoft.Json.Formatting.None)]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+            </scg:List>
+          </ui:MultipleAssign.AssignOperations>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:MultipleAssign>
+        <eus:Set_Generic_Value DisplayName="Store Result Record JSON" sap:VirtualizedContainerService.HintSize="431,142" sap2010:WorkflowViewState.IdRef="Set_Generic_Value_3" Key="[RESULT_RECORDS]" Value="[ResultRecordsJSON]" __Prefix="[IO.Directory.GetCurrentDirectory]">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </eus:Set_Generic_Value>
+        <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="431,101" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Trace" Message="[ResultRecordsJSON]" />
+      </Sequence>
+      <Sequence DisplayName="Construct Summary" sap:VirtualizedContainerService.HintSize="716,1117" sap2010:WorkflowViewState.IdRef="Sequence_9">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <ui:MultipleAssign DisplayName="Deserialize Summary Info" sap:VirtualizedContainerService.HintSize="431,234" sap2010:WorkflowViewState.IdRef="MultipleAssign_15">
+          <ui:MultipleAssign.AssignOperations>
+            <scg:List x:TypeArguments="ui:AssignOperation" Capacity="8">
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_112">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JObject">[Summary]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JObject">[If(String.IsNullOrEmpty(SummaryInfoJSON), New JObject, JObject.Parse(SummaryInfoJSON))]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_113">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:String">[Message]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:String">
+                    <Literal x:TypeArguments="x:String" Value="" />
+                  </InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_114">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[FailedRecords]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">[If(String.IsNullOrEmpty(SummaryInfoJSON), 0, If(Convert.ToInt32(Summary("failed"))&gt;0,Convert.ToInt32(Summary("failed").ToString),0))]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_115">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[SuccessRecords]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">[If(String.IsNullOrEmpty(SummaryInfoJSON), 0, If(Convert.ToInt32(Summary("success"))&gt;0,Convert.ToInt32(Summary("success").ToString),0))]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_116">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[SkippedRecords]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">[If(String.IsNullOrEmpty(SummaryInfoJSON), 0, If(Convert.ToInt32(Summary("skipped"))&gt;0,Convert.ToInt32(Summary("skipped").ToString),0))]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+            </scg:List>
+          </ui:MultipleAssign.AssignOperations>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:MultipleAssign>
+        <ui:MultipleAssign DisplayName="Update Summary Info" sap:VirtualizedContainerService.HintSize="431,234" sap2010:WorkflowViewState.IdRef="MultipleAssign_11">
+          <ui:MultipleAssign.AssignOperations>
+            <scg:List x:TypeArguments="ui:AssignOperation" Capacity="8">
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_56">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[FailedRecords]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">[FailedRecords + failedCount]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_57">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[SuccessRecords]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">[SuccessRecords + succeededCount]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_58">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[SkippedRecords]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">[SkippedRecords +skippedCount]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_59">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Int32">[TotalRecords]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Int32">[SuccessRecords+SkippedRecords+FailedRecords]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_60">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:String">[Message]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:String">[String.Format("Total Records processed - {0} / Success - {1} / Failed - {2} / Skipped - {3}.", TotalRecords, SuccessRecords, FailedRecords, SkippedRecords)]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+            </scg:List>
+          </ui:MultipleAssign.AssignOperations>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:MultipleAssign>
+        <ui:MultipleAssign DisplayName="Serialize Summary Info" sap:VirtualizedContainerService.HintSize="431,265" sap2010:WorkflowViewState.IdRef="MultipleAssign_12">
+          <ui:MultipleAssign.AssignOperations>
+            <scg:List x:TypeArguments="ui:AssignOperation" Capacity="8">
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_61">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Summary("Message")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[Message]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_62">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Summary("failed")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[FailedRecords]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_63">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Summary("success")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[SuccessRecords]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_64">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Summary("skipped")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[SkippedRecords]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_65">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="njl:JToken">[Summary("total")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="njl:JToken">[TotalRecords]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_66">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="ui:GenericValue">[SummaryInfoJSON]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="ui:GenericValue">[Summary.ToString(Newtonsoft.Json.Formatting.None)]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+            </scg:List>
+          </ui:MultipleAssign.AssignOperations>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:MultipleAssign>
+        <eus:Set_Generic_Value DisplayName="Store Summary Info" sap:VirtualizedContainerService.HintSize="431,142" sap2010:WorkflowViewState.IdRef="Set_Generic_Value_4" Key="[SUMMARY_INFO]" Value="[SummaryInfoJSON]" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+      </Sequence>
+      <Sequence DisplayName="Updating Summary Result" sap:VirtualizedContainerService.HintSize="716,2016" sap2010:WorkflowViewState.IdRef="Sequence_15">
+        <Sequence.Variables>
+          <Variable x:TypeArguments="s:String[]" Name="FieldNames" />
+          <Variable x:TypeArguments="ui:GenericValue" Name="SummaryInfo" />
+          <Variable x:TypeArguments="njl:JObject" Name="SummaryResult" />
+          <Variable x:TypeArguments="x:String" Name="TotalForms" />
+          <Variable x:TypeArguments="njl:JObject" Name="SummaryInfoObject" />
+          <Variable x:TypeArguments="x:Int32" Name="Success" />
+          <Variable x:TypeArguments="x:Int32" Name="Skipped" />
+          <Variable x:TypeArguments="x:Int32" Name="Total" />
+          <Variable x:TypeArguments="x:Int32" Name="MoveToArchiveCount" />
+          <Variable x:TypeArguments="x:Int32" Name="MoveToQueueCount" />
+          <Variable x:TypeArguments="x:Int32" Name="Failed" />
+        </Sequence.Variables>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <TryCatch DisplayName="Get Summary Info" sap:VirtualizedContainerService.HintSize="654,1894" sap2010:WorkflowViewState.IdRef="TryCatch_5">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <TryCatch.Try>
+            <Sequence sap:VirtualizedContainerService.HintSize="616,1657" sap2010:WorkflowViewState.IdRef="Sequence_17">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <eus:Get_Generic_Value DisplayName="Get Summary" ErrorOnKeyMiss="True" sap:VirtualizedContainerService.HintSize="574,142" sap2010:WorkflowViewState.IdRef="Get_Generic_Value_5" Key="[SUMMARY_INFO]" Value="[SummaryInfo]" __Prefix="[IO.Directory.GetCurrentDirectory]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </eus:Get_Generic_Value>
+              <ui:MultipleAssign DisplayName="Multiple Assign" sap:VirtualizedContainerService.HintSize="574,296" sap2010:WorkflowViewState.IdRef="MultipleAssign_16">
+                <ui:MultipleAssign.AssignOperations>
+                  <scg:List x:TypeArguments="ui:AssignOperation" Capacity="8">
+                    <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_117">
+                      <ui:AssignOperation.To>
+                        <OutArgument x:TypeArguments="njl:JObject">[SummaryInfoObject]</OutArgument>
+                      </ui:AssignOperation.To>
+                      <ui:AssignOperation.Value>
+                        <InArgument x:TypeArguments="njl:JObject">[IF(IsNothing(SummaryInfo), New Newtonsoft.Json.Linq.JObject, Newtonsoft.Json.Linq.JObject.Parse(SummaryInfo.ToString))]</InArgument>
+                      </ui:AssignOperation.Value>
+                    </ui:AssignOperation>
+                    <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_118">
+                      <ui:AssignOperation.To>
+                        <OutArgument x:TypeArguments="x:Int32">[Success]</OutArgument>
+                      </ui:AssignOperation.To>
+                      <ui:AssignOperation.Value>
+                        <InArgument x:TypeArguments="x:Int32">[convert.ToInt32(SummaryInfoObject("success"))]</InArgument>
+                      </ui:AssignOperation.Value>
+                    </ui:AssignOperation>
+                    <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_119">
+                      <ui:AssignOperation.To>
+                        <OutArgument x:TypeArguments="x:Int32">[Failed]</OutArgument>
+                      </ui:AssignOperation.To>
+                      <ui:AssignOperation.Value>
+                        <InArgument x:TypeArguments="x:Int32">[convert.ToInt32(SummaryInfoObject("failed"))]</InArgument>
+                      </ui:AssignOperation.Value>
+                    </ui:AssignOperation>
+                    <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_120">
+                      <ui:AssignOperation.To>
+                        <OutArgument x:TypeArguments="x:Int32">[Skipped]</OutArgument>
+                      </ui:AssignOperation.To>
+                      <ui:AssignOperation.Value>
+                        <InArgument x:TypeArguments="x:Int32">[Convert.ToInt32(SummaryInfoObject("skipped"))]</InArgument>
+                      </ui:AssignOperation.Value>
+                    </ui:AssignOperation>
+                    <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_121">
+                      <ui:AssignOperation.To>
+                        <OutArgument x:TypeArguments="x:Int32">[TotalRecords]</OutArgument>
+                      </ui:AssignOperation.To>
+                      <ui:AssignOperation.Value>
+                        <InArgument x:TypeArguments="x:Int32">[Convert.ToInt32(SummaryInfoObject("total"))]</InArgument>
+                      </ui:AssignOperation.Value>
+                    </ui:AssignOperation>
+                    <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_122">
+                      <ui:AssignOperation.To>
+                        <OutArgument x:TypeArguments="njl:JObject">[SummaryResult]</OutArgument>
+                      </ui:AssignOperation.To>
+                      <ui:AssignOperation.Value>
+                        <InArgument x:TypeArguments="njl:JObject">[New Newtonsoft.Json.Linq.JObject]</InArgument>
+                      </ui:AssignOperation.Value>
+                    </ui:AssignOperation>
+                    <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_123">
+                      <ui:AssignOperation.To>
+                        <OutArgument x:TypeArguments="s:String[]">[FieldNames]</OutArgument>
+                      </ui:AssignOperation.To>
+                      <ui:AssignOperation.Value>
+                        <InArgument x:TypeArguments="s:String[]">[SummaryFieldNames.ToArray]</InArgument>
+                      </ui:AssignOperation.Value>
+                    </ui:AssignOperation>
+                  </scg:List>
+                </ui:MultipleAssign.AssignOperations>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:MultipleAssign>
+              <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" sap2010:Annotation.AnnotationText="Iterates each Fieldnames for the array and assign the value to it." DisplayName="For Each" sap:VirtualizedContainerService.HintSize="574,585" sap2010:WorkflowViewState.IdRef="ForEach`1_1" Values="[FieldNames]">
+                <ui:ForEach.Body>
+                  <ActivityAction x:TypeArguments="x:String">
+                    <ActivityAction.Argument>
+                      <DelegateInArgument x:TypeArguments="x:String" Name="item" />
+                    </ActivityAction.Argument>
+                    <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="538,420" sap2010:WorkflowViewState.IdRef="Sequence_16">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <Switch x:TypeArguments="x:String" DisplayName="Switch" Expression="[item.ToString.ToLower]" sap:VirtualizedContainerService.HintSize="496,330" sap2010:WorkflowViewState.IdRef="Switch`1_1">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <Assign x:Key="total" sap:VirtualizedContainerService.HintSize="262,70" sap2010:WorkflowViewState.IdRef="Assign_1">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="njl:JToken">[SummaryResult("total")]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="njl:JToken">[TotalRecords]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                        <Assign x:Key="success" sap:VirtualizedContainerService.HintSize="262,70" sap2010:WorkflowViewState.IdRef="Assign_2">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="njl:JToken">[SummaryResult("success")]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="njl:JToken">[Success]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                        <Assign x:Key="failure" sap:VirtualizedContainerService.HintSize="262,70" sap2010:WorkflowViewState.IdRef="Assign_3">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="njl:JToken">[SummaryResult("failed")]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="njl:JToken">[Failed]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                        <Assign x:Key="skipped" sap:VirtualizedContainerService.HintSize="262,70" sap2010:WorkflowViewState.IdRef="Assign_4">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="njl:JToken">[SummaryResult("skipped")]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="njl:JToken">[Skipped]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                      </Switch>
+                    </Sequence>
+                  </ActivityAction>
+                </ui:ForEach.Body>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ForEach>
+              <Assign sap:VirtualizedContainerService.HintSize="574,70" sap2010:WorkflowViewState.IdRef="Assign_5">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="ui:GenericValue">[SummaryResultJson]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="ui:GenericValue">[SummaryResult.ToString(Newtonsoft.Json.Formatting.None)]</InArgument>
+                </Assign.Value>
+              </Assign>
+              <eus:Set_Generic_Value sap2010:Annotation.AnnotationText="Stores summary result data." DisplayName="Store Summary Result" sap:VirtualizedContainerService.HintSize="574,173" sap2010:WorkflowViewState.IdRef="Set_Generic_Value_5" Key="[SUMMARY_RESULT]" Value="[SummaryResultJson]" __Prefix="[IO.Directory.GetCurrentDirectory]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </eus:Set_Generic_Value>
+              <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="574,101" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Trace" Message="[SummaryResult]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:LogMessage>
+            </Sequence>
+          </TryCatch.Try>
+          <TryCatch.Catches>
+            <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="620,21" sap2010:WorkflowViewState.IdRef="Catch`1_5">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ActivityAction x:TypeArguments="s:Exception">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                </ActivityAction.Argument>
+                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,61" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[exception.Message]">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:LogMessage>
+              </ActivityAction>
+            </Catch>
+          </TryCatch.Catches>
+        </TryCatch>
+      </Sequence>
+    </Sequence>
+  </Sequence>
+</Activity>

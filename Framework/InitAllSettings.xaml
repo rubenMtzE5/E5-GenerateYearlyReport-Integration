@@ -1,0 +1,567 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:euc="clr-namespace:Element5_Core.Utils.Config;assembly=Element5.Core" xmlns:eue="clr-namespace:Element5_Core.Utils.Exception;assembly=Element5.Core" xmlns:euhe="clr-namespace:Element5_Core.Utils.Hooks.Execution_Hooks;assembly=Element5.Core" xmlns:eung="clr-namespace:Element5_Core.Utils.Notifications_Channel.Gmail;assembly=Element5.Core" xmlns:eus="clr-namespace:Element5_Core.Utils.Store;assembly=Element5.Core" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:njl="clr-namespace:Newtonsoft.Json.Linq;assembly=Newtonsoft.Json" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:ss="clr-namespace:System.Security;assembly=mscorlib" xmlns:this="clr-namespace:" xmlns:ucas="clr-namespace:UiPath.Core.Activities.Storage;assembly=UiPath.System.Activities" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property sap2010:Annotation.AnnotationText="Email credential asset for notifying exception" Name="ExceptionGmailAccountCredentialAsset" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property sap2010:Annotation.AnnotationText="Email credential asset for notifying successful execution" Name="NotificationGmailAcccountCredentialAsset" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property sap2010:Annotation.AnnotationText="Email recepients name when workflow executed. It is a comma seperated value" Name="NotificationEmailRecipients" Type="InArgument(s:String[])">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property sap2010:Annotation.AnnotationText="Email recepients name when exception encountered. It is a comma seperated value" Name="ExceptionEmailRecipients" Type="InArgument(s:String[])">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property sap2010:Annotation.AnnotationText="Jobject contains the Workflow Config" Name="FlowConfig" Type="OutArgument(njl:JObject)" />
+    <x:Property sap2010:Annotation.AnnotationText="Name of the Client" Name="ClientName" Type="OutArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Summary field names to update in Automation Hub" Name="SummaryFieldNames" Type="OutArgument(scg:List(x:String))" />
+    <x:Property sap2010:Annotation.AnnotationText="Deeplink of the Automation Hub run" Name="DeepLink" Type="OutArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Name of the Storage bucket which contains the Workflow config" Name="StorageBucketName" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Config file name in the Storage bucket" Name="ConfigPath" Type="InArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Name of the process in Automation Hub" Name="ProcessName" Type="OutArgument(x:String)" />
+    <x:Property sap2010:Annotation.AnnotationText="Config obtained from Automation Hub&#xA;" Name="Config" Type="OutArgument(njl:JObject)" />
+  </x:Members>
+  <this:Main.StorageBucketName>
+    <InArgument x:TypeArguments="x:String" />
+  </this:Main.StorageBucketName>
+  <this:Main.ConfigPath>
+    <InArgument x:TypeArguments="x:String" />
+  </this:Main.ConfigPath>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>1298,5116</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="84">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Security</x:String>
+      <x:String>Newtonsoft.Json.Linq</x:String>
+      <x:String>Newtonsoft.Json</x:String>
+      <x:String>YamlDotNet.Serialization</x:String>
+      <x:String>EasyEncryption</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.InteropServices</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
+      <x:String>Element5_Core.Utils.Notifications_Channel.Gmail</x:String>
+      <x:String>Element5_Core.Utils.Store</x:String>
+      <x:String>Element5_Core.Utils.Exception</x:String>
+      <x:String>System.Dynamic</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Collections.Specialized</x:String>
+      <x:String>Element5_Core.Utils.Hooks.Execution_Hooks</x:String>
+      <x:String>UiPath.Web.Activities</x:String>
+      <x:String>UiPath.Core.Activities.Storage</x:String>
+      <x:String>UiPath.Core.Activities.Orchestrator</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>UiPath.Activities.System.Properties</x:String>
+      <x:String>Element5_Core.Utils.Config</x:String>
+      <x:String>Alphabet.Exception</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>YamlDotNet</AssemblyReference>
+      <AssemblyReference>EasyEncryption</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>Element5.Core</AssemblyReference>
+      <AssemblyReference>UiPath.Web.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.Bcl.AsyncInterfaces</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.AmazonWebServices</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>GetXamlFileNameActivity</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>NPOI</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <sap:WorkflowViewStateService.ViewState>
+    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+      <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
+      <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
+    </scg:Dictionary>
+  </sap:WorkflowViewStateService.ViewState>
+  <Sequence sap2010:Annotation.AnnotationText="This module initialize the Errorconfig, Workflow config, Email channels,E5Hook" DisplayName="Initialize Workflow" sap:VirtualizedContainerService.HintSize="1308,5051" sap2010:WorkflowViewState.IdRef="Sequence_5">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="ConfigText" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <euc:Load_Config_File ConfigNamespace="E5.Report.FileUpload" ConfigYamlPath="[IO.Directory.GetCurrentDirectory +&quot;\data\Config.yml&quot;]" DisplayName="Load Config File" sap:VirtualizedContainerService.HintSize="1266,61" sap2010:WorkflowViewState.IdRef="Load_Config_File_1" ___Prefix="[IO.Directory.GetCurrentDirectory]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </euc:Load_Config_File>
+    <TryCatch DisplayName="Try Catch-Read Config File" sap:VirtualizedContainerService.HintSize="1266,1123" sap2010:WorkflowViewState.IdRef="TryCatch_5">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <TryCatch.Try>
+        <Sequence sap2010:Annotation.AnnotationText="Read the config file from the Orchestrator and store it in Jobject FlowConfig" DisplayName="Read config file" sap:VirtualizedContainerService.HintSize="400,373" sap2010:WorkflowViewState.IdRef="Sequence_27">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ucas:ReadStorageText TimeoutMS="{x:Null}" DisplayName="Read Storage Text" sap:VirtualizedContainerService.HintSize="358,142" sap2010:WorkflowViewState.IdRef="ReadStorageText_1" Path="[ConfigPath]" Result="[ConfigText]" StorageBucketName="[StorageBucketName]" />
+          <ui:DeserializeJson x:TypeArguments="njl:JObject" sap2010:Annotation.AnnotationText="Deseralize the Config Text into Jobject" DisplayName="Deserialize Config JSON" sap:VirtualizedContainerService.HintSize="358,101" sap2010:WorkflowViewState.IdRef="DeserializeJson`1_1" JsonObject="[FlowConfig]" JsonString="[ConfigText]">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:DeserializeJson>
+        </Sequence>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="406,430" sap2010:WorkflowViewState.IdRef="Catch`1_5">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ActivityAction x:TypeArguments="s:Exception">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="Exception Handler" sap:VirtualizedContainerService.HintSize="400,361" sap2010:WorkflowViewState.IdRef="Sequence_28">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <eue:Log_Exception DisplayName="Log Exception" ExceptionObject="[exception]" sap:VirtualizedContainerService.HintSize="358,89" sap2010:WorkflowViewState.IdRef="Log_Exception_4" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+              <eue:Throw_Business_Exception DisplayName="Throw Business Exception" sap:VirtualizedContainerService.HintSize="358,142" sap2010:WorkflowViewState.IdRef="Throw_Business_Exception_4" MessageCode="ERROR_LOADING_FLOWCONFIG" __Prefix="[IO.Directory.GetCurrentDirectory]">
+                <eue:Throw_Business_Exception.ExtraMessage>
+                  <InArgument x:TypeArguments="x:String">
+                    <Literal x:TypeArguments="x:String" DisplayName="Literal&lt;String&gt;" Value="" />
+                  </InArgument>
+                </eue:Throw_Business_Exception.ExtraMessage>
+              </eue:Throw_Business_Exception>
+            </Sequence>
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
+    <Sequence DisplayName="Extract and Store Params" sap:VirtualizedContainerService.HintSize="1266,90" sap2010:WorkflowViewState.IdRef="Sequence_12">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <TryCatch DisplayName="Try Catch - Get ACME Creds" sap:VirtualizedContainerService.HintSize="338,61" sap2010:WorkflowViewState.IdRef="TryCatch_6">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <TryCatch.Try>
+          <Sequence sap:VirtualizedContainerService.HintSize="400,320" sap2010:WorkflowViewState.IdRef="Sequence_32">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="358,101" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Trace" Message="[&quot;Getting ACME Credenetials&quot;]" />
+            <ui:GetRobotCredential Password="{x:Null}" TimeoutMS="{x:Null}" Username="{x:Null}" AssetName="[FlowConfig(&quot;ACMECreds&quot;).ToString]" CacheStrategy="None" DisplayName="Get ACME Credential" sap:VirtualizedContainerService.HintSize="358,89" sap2010:WorkflowViewState.IdRef="GetRobotCredential_4" />
+          </Sequence>
+        </TryCatch.Try>
+        <TryCatch.Catches>
+          <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="404,211" sap2010:WorkflowViewState.IdRef="Catch`1_6">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ActivityAction x:TypeArguments="s:Exception">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+              </ActivityAction.Argument>
+              <eue:Throw_Business_Exception DisplayName="Throw Business Exception" sap:VirtualizedContainerService.HintSize="284,142" sap2010:WorkflowViewState.IdRef="Throw_Business_Exception_7" MessageCode="GET_CREDENTIAL_FAILED" __Prefix="[IO.Directory.GetCurrentDirectory]">
+                <eue:Throw_Business_Exception.ExtraMessage>
+                  <InArgument x:TypeArguments="x:String">
+                    <Literal x:TypeArguments="x:String" DisplayName="Literal&lt;String&gt;" Value="" />
+                  </InArgument>
+                </eue:Throw_Business_Exception.ExtraMessage>
+              </eue:Throw_Business_Exception>
+            </ActivityAction>
+          </Catch>
+        </TryCatch.Catches>
+      </TryCatch>
+      <TryCatch DisplayName="Try Catch - Get Email Creds" sap:VirtualizedContainerService.HintSize="338,61" sap2010:WorkflowViewState.IdRef="TryCatch_7">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <TryCatch.Try>
+          <Sequence sap:VirtualizedContainerService.HintSize="400,320" sap2010:WorkflowViewState.IdRef="Sequence_33">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="358,101" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Trace" Message="[&quot;Getting Email Credenetials&quot;]" />
+            <ui:GetRobotCredential Password="{x:Null}" TimeoutMS="{x:Null}" Username="{x:Null}" AssetName="[FlowConfig(&quot;EmailCreds&quot;).ToString]" CacheStrategy="None" DisplayName="Get ACME Credential" sap:VirtualizedContainerService.HintSize="358,89" sap2010:WorkflowViewState.IdRef="GetRobotCredential_5" />
+          </Sequence>
+        </TryCatch.Try>
+        <TryCatch.Catches>
+          <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="404,211" sap2010:WorkflowViewState.IdRef="Catch`1_7">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ActivityAction x:TypeArguments="s:Exception">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+              </ActivityAction.Argument>
+              <eue:Throw_Business_Exception DisplayName="Throw Business Exception" sap:VirtualizedContainerService.HintSize="284,142" sap2010:WorkflowViewState.IdRef="Throw_Business_Exception_8" MessageCode="GET_CREDENTIAL_FAILED" __Prefix="[IO.Directory.GetCurrentDirectory]">
+                <eue:Throw_Business_Exception.ExtraMessage>
+                  <InArgument x:TypeArguments="x:String">
+                    <Literal x:TypeArguments="x:String" DisplayName="Literal&lt;String&gt;" Value="" />
+                  </InArgument>
+                </eue:Throw_Business_Exception.ExtraMessage>
+              </eue:Throw_Business_Exception>
+            </ActivityAction>
+          </Catch>
+        </TryCatch.Catches>
+      </TryCatch>
+      <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="338,101" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Login Credential asset name stored&quot;]" />
+    </Sequence>
+    <Sequence DisplayName="Initialize Email Channels" sap:VirtualizedContainerService.HintSize="1266,90" sap2010:WorkflowViewState.IdRef="Sequence_13">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <Sequence DisplayName="Notification Email" sap:VirtualizedContainerService.HintSize="502,1409" sap2010:WorkflowViewState.IdRef="Sequence_17">
+        <Sequence.Variables>
+          <Variable x:TypeArguments="ss:SecureString" Name="GmailPassword" />
+          <Variable x:TypeArguments="x:String" Name="GmailID" />
+        </Sequence.Variables>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <TryCatch DisplayName="Try Catch-Notification Email" sap:VirtualizedContainerService.HintSize="440,839" sap2010:WorkflowViewState.IdRef="TryCatch_3">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <TryCatch.Try>
+            <ui:GetRobotCredential TimeoutMS="{x:Null}" AssetName="[NotificationGmailAcccountCredentialAsset]" CacheStrategy="None" DisplayName="Get Notification Gmail Credential" sap:VirtualizedContainerService.HintSize="298,89" sap2010:WorkflowViewState.IdRef="GetRobotCredential_2" Password="[GmailPassword]" Username="[GmailID]" />
+          </TryCatch.Try>
+          <TryCatch.Catches>
+            <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="406,430" sap2010:WorkflowViewState.IdRef="Catch`1_3">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ActivityAction x:TypeArguments="s:Exception">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                </ActivityAction.Argument>
+                <Sequence DisplayName="Exception Handler" sap:VirtualizedContainerService.HintSize="400,361" sap2010:WorkflowViewState.IdRef="Sequence_18">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <eue:Log_Exception DisplayName="Log Exception" ExceptionObject="[exception]" sap:VirtualizedContainerService.HintSize="358,89" sap2010:WorkflowViewState.IdRef="Log_Exception_2" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+                  <eue:Throw_Business_Exception DisplayName="Throw Business Exception" ExtraMessage="[NotificationGmailAcccountCredentialAsset]" sap:VirtualizedContainerService.HintSize="358,142" sap2010:WorkflowViewState.IdRef="Throw_Business_Exception_2" MessageCode="ERROR_LOADING_ASSET" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+                </Sequence>
+              </ActivityAction>
+            </Catch>
+          </TryCatch.Catches>
+        </TryCatch>
+        <eung:Initialize_Gmail BCCAddress="{x:Null}" CCAddress="{x:Null}" DisplayName="Initialize Notification Gmail" GmailID="[GmailID]" sap:VirtualizedContainerService.HintSize="440,195" sap2010:WorkflowViewState.IdRef="Initialize_Gmail_1" MailName="NotificationEmail" Password="[GmailPassword]" ToAddress="[NotificationEmailRecipients]" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+        <eus:Set_Generic_Value sap2010:Annotation.AnnotationText="Set Notification Email Initialized flag" DisplayName="Set Flag" sap:VirtualizedContainerService.HintSize="440,173" sap2010:WorkflowViewState.IdRef="Set_Generic_Value_3" Key="NotificationEmailInitialized" Value="[True]" __Prefix="[IO.Directory.GetCurrentDirectory]">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </eus:Set_Generic_Value>
+      </Sequence>
+      <Sequence DisplayName="Exception Email" sap:VirtualizedContainerService.HintSize="502,1591" sap2010:WorkflowViewState.IdRef="Sequence_20">
+        <Sequence.Variables>
+          <Variable x:TypeArguments="ss:SecureString" Name="GmailPassword" />
+          <Variable x:TypeArguments="x:String" Name="GmailID" />
+        </Sequence.Variables>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <TryCatch DisplayName="Try Catch-Exception Email" sap:VirtualizedContainerService.HintSize="440,839" sap2010:WorkflowViewState.IdRef="TryCatch_4">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <TryCatch.Try>
+            <ui:GetRobotCredential TimeoutMS="{x:Null}" AssetName="[ExceptionGmailAccountCredentialAsset]" CacheStrategy="None" DisplayName="Get Exception Gmail Credential" sap:VirtualizedContainerService.HintSize="284,89" sap2010:WorkflowViewState.IdRef="GetRobotCredential_3" Password="[GmailPassword]" Username="[GmailID]" />
+          </TryCatch.Try>
+          <TryCatch.Catches>
+            <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="406,430" sap2010:WorkflowViewState.IdRef="Catch`1_4">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ActivityAction x:TypeArguments="s:Exception">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                </ActivityAction.Argument>
+                <Sequence DisplayName="Exception Handler" sap:VirtualizedContainerService.HintSize="400,361" sap2010:WorkflowViewState.IdRef="Sequence_19">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <eue:Log_Exception DisplayName="Log Exception" ExceptionObject="[exception]" sap:VirtualizedContainerService.HintSize="358,89" sap2010:WorkflowViewState.IdRef="Log_Exception_3" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+                  <eue:Throw_Business_Exception DisplayName="Throw Business Exception" ExtraMessage="[ExceptionGmailAccountCredentialAsset]" sap:VirtualizedContainerService.HintSize="358,142" sap2010:WorkflowViewState.IdRef="Throw_Business_Exception_3" MessageCode="ERROR_LOADING_ASSET" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+                </Sequence>
+              </ActivityAction>
+            </Catch>
+          </TryCatch.Catches>
+        </TryCatch>
+        <eus:Set_Generic_Value DisplayName="Store Exception Assetname" sap:VirtualizedContainerService.HintSize="440,142" sap2010:WorkflowViewState.IdRef="Set_Generic_Value_9" Key="ExceptionAssetName" Value="[ExceptionGmailAccountCredentialAsset]" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+        <eung:Initialize_Gmail BCCAddress="{x:Null}" CCAddress="{x:Null}" DisplayName="Initialize Exception Gmail" GmailID="[GmailID]" sap:VirtualizedContainerService.HintSize="440,195" sap2010:WorkflowViewState.IdRef="Initialize_Gmail_2" MailName="ExceptionEmail" Password="[GmailPassword]" ToAddress="[ExceptionEmailRecipients]" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+        <eus:Set_Generic_Value sap2010:Annotation.AnnotationText="Set the Exception Mail Initialized flag" DisplayName="Set Exception Mail flag" sap:VirtualizedContainerService.HintSize="440,173" sap2010:WorkflowViewState.IdRef="Set_Generic_Value_4" Key="ExceptionEmailInitialized" Value="[True]" __Prefix="[IO.Directory.GetCurrentDirectory]">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </eus:Set_Generic_Value>
+      </Sequence>
+    </Sequence>
+    <If sap2010:Annotation.AnnotationText="Check whether the Hook login required" Condition="[Convert.ToBoolean(FlowConfig(&quot;IsE5HookRequired&quot;))]" DisplayName="Check Automation Hub Required" sap:VirtualizedContainerService.HintSize="1266,3437" sap2010:WorkflowViewState.IdRef="If_1">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <If.Then>
+        <Sequence DisplayName="Initialize E5 Hooks" sap:VirtualizedContainerService.HintSize="821,3238" sap2010:WorkflowViewState.IdRef="Sequence_14">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:String" Name="HookUserName" />
+            <Variable x:TypeArguments="ss:SecureString" Name="HookPassword" />
+            <Variable x:TypeArguments="x:String" Name="TaskRunID" />
+            <Variable x:TypeArguments="x:String" Name="ProcessIdentifier" />
+            <Variable x:TypeArguments="njl:JObject" Name="Config" />
+          </Sequence.Variables>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <If Condition="[(not IsNothing(FlowConfig(&quot;E5HookCredentialAsset&quot;)) andalso not String.IsNullOrEmpty(FlowConfig(&quot;E5HookCredentialAsset&quot;).ToString)) and (not IsNothing(FlowConfig(&quot;E5HookURL&quot;)) andalso not String.IsNullOrEmpty(FlowConfig(&quot;E5HookURL&quot;).ToString)) and (not IsNothing(FlowConfig(&quot;ProcessName&quot;)) andalso not String.IsNullOrEmpty(FlowConfig(&quot;ProcessName&quot;).ToString)) and  (not IsNothing(FlowConfig(&quot;TaskName&quot;)) andalso not String.IsNullOrEmpty(FlowConfig(&quot;TaskName&quot;).ToString))]" DisplayName="Validate Hook input arguments" sap:VirtualizedContainerService.HintSize="779,541" sap2010:WorkflowViewState.IdRef="If_3">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <If.Then>
+              <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,101" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;mandatory arguments are provided&quot;]" />
+            </If.Then>
+            <If.Else>
+              <Sequence DisplayName="Invalid Input" sap:VirtualizedContainerService.HintSize="400,373" sap2010:WorkflowViewState.IdRef="Sequence_31">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="358,101" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[&quot;Invalid input arguments in E5 Hook&quot;]" />
+                <eue:Throw_Business_Exception DisplayName="Throw Business Exception" sap:VirtualizedContainerService.HintSize="358,142" sap2010:WorkflowViewState.IdRef="Throw_Business_Exception_6" MessageCode="INVALID_INPUT_ARGUMENTS" __Prefix="[IO.Directory.GetCurrentDirectory]">
+                  <eue:Throw_Business_Exception.ExtraMessage>
+                    <InArgument x:TypeArguments="x:String">
+                      <Literal x:TypeArguments="x:String" DisplayName="Literal&lt;String&gt;" Value="" />
+                    </InArgument>
+                  </eue:Throw_Business_Exception.ExtraMessage>
+                </eue:Throw_Business_Exception>
+              </Sequence>
+            </If.Else>
+          </If>
+          <TryCatch DisplayName="Try Catch- Get Hook" sap:VirtualizedContainerService.HintSize="779,940" sap2010:WorkflowViewState.IdRef="TryCatch_2">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <TryCatch.Try>
+              <ui:GetRobotCredential TimeoutMS="{x:Null}" AssetName="[FlowConfig(&quot;E5HookCredentialAsset&quot;).ToString]" CacheStrategy="None" DisplayName="Get Hook Credential" sap:VirtualizedContainerService.HintSize="334,190" sap2010:WorkflowViewState.IdRef="GetRobotCredential_1" Password="[HookPassword]" Username="[HookUserName]" />
+            </TryCatch.Try>
+            <TryCatch.Catches>
+              <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="406,430" sap2010:WorkflowViewState.IdRef="Catch`1_2">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <ActivityAction x:TypeArguments="s:Exception">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                  </ActivityAction.Argument>
+                  <Sequence DisplayName="Exception Handler" sap:VirtualizedContainerService.HintSize="400,361" sap2010:WorkflowViewState.IdRef="Sequence_16">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <eue:Log_Exception DisplayName="Log Exception" ExceptionObject="[exception]" sap:VirtualizedContainerService.HintSize="358,89" sap2010:WorkflowViewState.IdRef="Log_Exception_1" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+                    <eue:Throw_Business_Exception DisplayName="Throw Business Exception" ExtraMessage="[FlowConfig(&quot;E5HookCredentialAsset&quot;).ToString]" sap:VirtualizedContainerService.HintSize="358,142" sap2010:WorkflowViewState.IdRef="Throw_Business_Exception_1" MessageCode="ERROR_LOADING_ASSET" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+                  </Sequence>
+                </ActivityAction>
+              </Catch>
+            </TryCatch.Catches>
+          </TryCatch>
+          <Assign sap:VirtualizedContainerService.HintSize="779,70" sap2010:WorkflowViewState.IdRef="Assign_1">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[ProcessName]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[FlowConfig("ProcessName").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <euhe:Begin_Task_Execution ClientName="[ClientName]" DeepLink="[DeepLink]" DisplayName="Begin Task Execution" FlowConfig="[Config]" sap:VirtualizedContainerService.HintSize="779,354" HookPassword="[HookPassword]" HookURL="[FlowConfig(&quot;E5HookURL&quot;).ToString]" HookUserName="[HookUserName]" sap2010:WorkflowViewState.IdRef="Begin_Task_Execution_1" ProcessIdentifier="[ProcessIdentifier]" ProcessName="[ProcessName]" SummaryFieldNames="[SummaryFieldNames]" TaskName="[FlowConfig(&quot;TaskName&quot;).ToString]" TaskRunIdentifier="[TaskRunID]" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+          <eus:Set_Generic_Value DisplayName="Store TaskRunID" sap:VirtualizedContainerService.HintSize="779,142" sap2010:WorkflowViewState.IdRef="Set_Generic_Value_1" Key="TaskRunID" Value="[TaskRunID]" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+          <eus:Set_Generic_Value DisplayName="Store ProcessIdentifier" sap:VirtualizedContainerService.HintSize="779,142" sap2010:WorkflowViewState.IdRef="Set_Generic_Value_6" Key="ProcessIdentifier" Value="[ProcessIdentifier]" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+          <eus:Set_Generic_Value DisplayName="Store Process Name" sap:VirtualizedContainerService.HintSize="779,142" sap2010:WorkflowViewState.IdRef="Set_Generic_Value_7" Key="ProcessName" Value="[ProcessName]" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+          <eus:Set_Generic_Value DisplayName="Store Client Name" sap:VirtualizedContainerService.HintSize="779,142" sap2010:WorkflowViewState.IdRef="Set_Generic_Value_8" Key="ClientName" Value="[ClientName]" __Prefix="[IO.Directory.GetCurrentDirectory]" />
+          <ui:AddLogFields DisplayName="Add Log Fields" sap:VirtualizedContainerService.HintSize="779,32" sap2010:WorkflowViewState.IdRef="AddLogFields_1">
+            <ui:AddLogFields.Fields>
+              <InArgument x:TypeArguments="x:String" x:Key="ProcessName">[ProcessName]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="TaskName">[FlowConfig("TaskName").ToString]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="TaskRunID">[TaskRunID]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="ProcessIdentifier">[ProcessIdentifier]</InArgument>
+            </ui:AddLogFields.Fields>
+          </ui:AddLogFields>
+          <eus:Set_Generic_Value sap2010:Annotation.AnnotationText="Set the E5 Hooks Initialized flag" DisplayName="Set flag" sap:VirtualizedContainerService.HintSize="779,173" sap2010:WorkflowViewState.IdRef="Set_Generic_Value_5" Key="E5HooksInitialized" Value="[True]" __Prefix="[IO.Directory.GetCurrentDirectory]">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </eus:Set_Generic_Value>
+          <ui:DeserializeJson x:TypeArguments="njl:JObject" DisplayName="Deserialize Config JSON" sap:VirtualizedContainerService.HintSize="779,70" sap2010:WorkflowViewState.IdRef="DeserializeJson`1_5" JsonObject="[FlowConfig]" JsonString="[System.io.File.ReadAllText(io.Directory.GetCurrentDirectory + &quot;\data\Config.json&quot;)]" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Hook not Initialized" sap:VirtualizedContainerService.HintSize="400,411" sap2010:WorkflowViewState.IdRef="Sequence_29">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <Assign sap:VirtualizedContainerService.HintSize="358,70" sap2010:WorkflowViewState.IdRef="Assign_2">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[ProcessName]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[FlowConfig("ProcessName").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign sap:VirtualizedContainerService.HintSize="358,70" sap2010:WorkflowViewState.IdRef="Assign_3">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[ClientName]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[FlowConfig("Client").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="358,101" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Hook not initialized&quot;]" />
+        </Sequence>
+      </If.Else>
+    </If>
+  </Sequence>
+</Activity>
